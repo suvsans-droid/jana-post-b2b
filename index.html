@@ -1,0 +1,1935 @@
+<!doctype html>
+<!-- v20250401 -->
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jana Post - Калькулятор</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css?t=1743625100" />
+    <style>
+      .parcel-col{display:flex;flex-direction:column}
+      .parcel-col.half{flex:1;min-width:0}
+      .parcel-col.third{flex:1;min-width:0}
+      .parcel-input-wrap.error{border-color:#e7000b!important;background:#fef2f2!important}
+      .parcel-input-wrap.error:focus-within{border-color:#e7000b!important}
+      .field-error{display:none;margin:0;padding:4px 8px 0;font-size:12px;font-weight:400;line-height:16px;color:#fb2c36}
+      .field-error.visible{display:block}
+      .warehouse-note{display:none;margin:0;font-size:16px;font-weight:600;line-height:24px;color:#101828}
+      .calc-total.warehouse .warehouse-note{display:block}
+      .calc-total.warehouse .total-row{display:none}
+      .calc-error{display:none;font-size:12px;line-height:16px;color:#ef4444}
+      .calc-error.visible{display:block}
+      .btn-primary:disabled{background:#f3f4f6!important;color:#99a1af!important;cursor:default}
+      .parcel-block{background:#f3f4f6;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:16px}
+      .parcel-block+.parcel-block{margin-top:8px}
+      .parcel-block-title{margin:0;font-size:14px;font-weight:500;line-height:20px;color:#000}
+      .parcel-fields-col{display:flex;flex-direction:column;gap:8px}
+      .parcel-input-wrap.os{background:#fff}
+      .parcel-input-wrap.os.disabled{background:#f9fafb}
+      .add-parcel{display:flex;align-items:center;gap:8px;border:none;background:none;padding:0;cursor:pointer;font-family:"Inter",sans-serif;font-size:14px;font-weight:600;line-height:20px;color:#101828;-webkit-tap-highlight-color:transparent}
+      .add-icon{width:24px;height:24px;position:relative;overflow:hidden;flex-shrink:0}
+      .add-icon img{position:absolute;inset:20.83%;width:58.34%;height:58.34%;display:block;max-width:none}
+      .parcel-block+.parcel-block{margin-top:16px}
+      .parcel-block-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+      .parcel-delete{display:none;border:none;background:none;padding:0;cursor:pointer}
+      .parcel-delete.visible{display:block}
+      .delete-icon{width:20px;height:20px;position:relative;overflow:hidden;display:block}
+      .delete-icon img{position:absolute;inset:8.33%;width:83.34%;height:83.34%;display:block;max-width:none}
+      .checks-group{display:flex;flex-direction:column;gap:8px}
+      [hidden]{display:none!important}
+    </style>
+  </head>
+  <body>
+    <div class="app-wrapper">
+    <main class="screen" id="mainScreen" data-mode="personal">
+      <header class="status-bar">
+        <span class="time">9:41</span>
+        <div class="status-icons">
+          <img src="./assets/mobile-signal.svg" alt="" />
+          <img src="./assets/wifi.svg" alt="" />
+          <img src="./assets/battery.svg" alt="" />
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="hero-scroll">
+          <article class="hero-card">
+            <img class="hero-bg" src="./assets/banner1.png" alt="" />
+            <span class="badge badge-sm">+500</span>
+            <span class="badge badge-lg">+500</span>
+            <h4>Пригласите друзей!</h4>
+          </article>
+          <article class="hero-card">
+            <img class="hero-bg" src="./assets/banner2.png" alt="" />
+            <span class="price">$ 2,4</span>
+            <h4>Доставка из Китая дешево!</h4>
+          </article>
+          <article class="hero-card">
+            <img class="hero-bg" src="./assets/banner1.png" alt="" />
+            <span class="badge badge-sm">+500</span>
+            <span class="badge badge-lg">+500</span>
+            <h4>Пригласите друзей!</h4>
+          </article>
+        </div>
+
+        <nav class="tabs" aria-label="Тип аккаунта">
+          <button type="button" class="tab tab-personal active" data-mode="personal">
+            <span class="tab-icon tab-icon-user"
+              ><img src="./assets/tab-user.svg" alt=""
+            /></span>
+            <span class="tab-label">Личный</span>
+          </button>
+          <button type="button" class="tab tab-business" data-mode="business">
+            <span class="tab-icon tab-icon-building"
+              ><img src="./assets/tab-building.svg" alt=""
+            /></span>
+            <span class="tab-label">Бизнес</span>
+          </button>
+        </nav>
+
+        <div class="view-personal">
+          <section class="card">
+            <h3>Скачайте маркетплейс</h3>
+            <div class="market-row">
+              <div class="market-col">
+                <div class="market-box red"><img class="logo-pdd" src="./assets/logo-pdd.svg" alt="" /></div>
+                <span>Pinduoduo</span>
+              </div>
+              <div class="market-col">
+                <div class="market-box orange"><img class="logo-taobao" src="./assets/logo-taobao.svg" alt="" /></div>
+                <span>Taobao</span>
+              </div>
+              <div class="market-col">
+                <div class="market-box white"><img class="logo-1688" src="./assets/logo-1688.svg" alt="" /></div>
+                <span>1688</span>
+              </div>
+              <div class="market-col">
+                <div class="market-box orange"><img class="logo-temu" src="./assets/logo-temu.svg" alt="" /></div>
+                <span>Temu</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card address-card">
+            <h3>Скопируйте адрес доставки</h3>
+            <div class="address-info">
+              <div class="row id-row">
+                <div class="left-pair">
+                  <span class="chip">收件人</span>
+                  <span class="value">JP3353483</span>
+                  <img class="copy" src="./assets/copy-green.svg" alt="" />
+                </div>
+                <span class="hint">Ваш ID</span>
+              </div>
+              <div class="row phone-row">
+                <div class="left-pair">
+                  <span class="chip">手机号</span>
+                  <span class="value">18158354927</span>
+                </div>
+                <span class="hint phone">Телефон склада</span>
+              </div>
+              <div class="row addr-row">
+                <div class="left-pair top">
+                  <span class="chip">详细地</span>
+                  <span class="value multiline">浙江省杭州市上城区姚园寺巷99号<br />99仓#JP3353483号</span>
+                </div>
+                <span class="hint addr">Адрес</span>
+              </div>
+            </div>
+
+            <button type="button" class="copy-all">
+              Скопировать всё сразу
+              <img src="./assets/copy-white.svg" alt="" />
+            </button>
+
+            <div class="video-card">
+              <div class="thumb">
+                <img src="./assets/video-thumb.png" alt="" />
+                <img class="play-badge" src="./assets/play-circle.svg" alt="" />
+              </div>
+              <div class="video-text">
+                <strong>Как сделать первый заказ?</strong>
+                <p>Смотрите видеоинструкцию</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="view-business" hidden>
+          <h2 class="calc-title">Калькулятор</h2>
+          <div class="calc-stack">
+            <section class="calc-card">
+              <h3 class="calc-card-title">Тип посылки</h3>
+              <div class="radio-list">
+                <label class="radio-row">
+                  <input type="radio" name="parcel-type" value="standard" checked class="visually-hidden" />
+                  <span class="radio-ui" aria-hidden="true"></span>
+                  <span class="radio-label">Посылка до 30 кг</span>
+                </label>
+                <label class="radio-row">
+                  <input type="radio" name="parcel-type" value="oversized" class="visually-hidden" />
+                  <span class="radio-ui" aria-hidden="true"></span>
+                  <span class="radio-label">Крупногабаритный груз</span>
+                </label>
+              </div>
+            </section>
+
+            <section class="calc-card">
+              <h3 class="calc-card-title">Направление</h3>
+              <div class="direction-from">
+                <span class="pin-wrap"><img src="./assets/pin.svg" alt="" /></span>
+                <div class="direction-text">
+                  <span class="field-label">Откуда</span>
+                  <span class="field-value">Алматы</span>
+                </div>
+              </div>
+              <div class="input-wrap">
+                <input type="text" class="field-input" id="input-where" placeholder="Куда" value="Атырау" />
+                <label class="input-label" for="input-where">Куда</label>
+              </div>
+            </section>
+
+            <section class="calc-card" id="parcelStandard">
+              <h3 class="calc-card-title">Параметры посылки</h3>
+              <div class="parcel-fields">
+                <div class="parcel-col half">
+                  <div class="parcel-input-wrap" id="weightWrap">
+                    <input type="text" class="parcel-input has-suffix" id="input-weight" placeholder="Вес" /><span class="input-suffix">кг</span>
+                    <label class="parcel-label" for="input-weight">Вес</label>
+                  </div>
+                  <p class="field-error" id="weightError">Вес превышает лимит 30 кг</p>
+                </div>
+                <div class="parcel-col half">
+                  <div class="parcel-input-wrap">
+                    <input type="text" class="parcel-input" id="input-count" placeholder="Кол-во мест" />
+                    <label class="parcel-label" for="input-count">Кол-во мест</label>
+                  </div>
+                </div>
+              </div>
+              <label class="check-row">
+                <input type="checkbox" class="visually-hidden" id="check-warehouse" />
+                <span class="check-ui" aria-hidden="true">
+                  <img class="check-off" src="./assets/checkbox.svg" alt="" />
+                  <img class="check-on" src="./assets/checkbox-checked.svg" alt="" />
+                </span>
+                <span class="check-label">Определить параметры на складе</span>
+              </label>
+              <div class="info-banner">
+                <img src="./assets/info-icon.svg" alt="" />
+                <p>
+                  Габариты одного места до 30 кг<br />
+                  до 50×40×40 см
+                </p>
+              </div>
+            </section>
+
+            <section class="calc-card" id="parcelOversized" hidden>
+              <h3 class="calc-card-title">Параметры посылки</h3>
+              <div id="parcelsContainer">
+                <div class="parcel-block" data-index="1">
+                  <div class="parcel-block-header">
+                    <p class="parcel-block-title">Посылка 1</p>
+                    <button type="button" class="parcel-delete" aria-label="Удалить">
+                      <span class="delete-icon"><img src="./assets/icon-delete.svg" alt="" /></span>
+                    </button>
+                  </div>
+                  <div class="parcel-fields-col">
+                    <div class="parcel-fields">
+                      <div class="parcel-col third">
+                        <div class="parcel-input-wrap os">
+                          <input type="text" class="parcel-input os-dim" placeholder="Длина" /><span class="input-suffix os-suffix">см</span>
+                          <label class="parcel-label">Длина</label>
+                        </div>
+                      </div>
+                      <div class="parcel-col third">
+                        <div class="parcel-input-wrap os">
+                          <input type="text" class="parcel-input os-dim" placeholder="Ширина" /><span class="input-suffix os-suffix">см</span>
+                          <label class="parcel-label">Ширина</label>
+                        </div>
+                      </div>
+                      <div class="parcel-col third">
+                        <div class="parcel-input-wrap os">
+                          <input type="text" class="parcel-input os-height os-dim" placeholder="Высота" /><span class="input-suffix os-suffix">см</span>
+                          <label class="parcel-label">Высота</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="parcel-fields">
+                      <div class="parcel-col half">
+                        <div class="parcel-input-wrap os">
+                          <input type="text" class="parcel-input os-weight os-dim" placeholder="Вес" /><span class="input-suffix os-suffix">кг</span>
+                          <label class="parcel-label">Вес</label>
+                        </div>
+                      </div>
+                      <div class="parcel-col half">
+                        <div class="parcel-input-wrap os">
+                          <input type="text" class="parcel-input os-count" placeholder="Кол-во мест" />
+                          <label class="parcel-label">Кол-во мест</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="checks-group">
+                    <label class="check-row">
+                      <input type="checkbox" class="visually-hidden os-check-warehouse" />
+                      <span class="check-ui" aria-hidden="true">
+                        <img class="check-off" src="./assets/checkbox.svg" alt="" />
+                        <img class="check-on" src="./assets/checkbox-checked.svg" alt="" />
+                      </span>
+                      <span class="check-label">Определить параметры на складе</span>
+                    </label>
+                    <label class="check-row">
+                      <input type="checkbox" class="visually-hidden os-check-fragile" />
+                      <span class="check-ui" aria-hidden="true">
+                        <img class="check-off" src="./assets/checkbox.svg" alt="" />
+                        <img class="check-on" src="./assets/checkbox-checked.svg" alt="" />
+                      </span>
+                      <span class="check-label">Хрупкий (не ставить сверху)</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="add-parcel" id="addParcel">
+                <span class="add-icon"><img src="./assets/icon-add.svg" alt="" /></span>
+                <span>Добавить посылку</span>
+              </button>
+              <div class="info-banner">
+                <img src="./assets/info-icon.svg" alt="" />
+                <p>Максимальные размеры крупного груза до 20 тонн — 13,6×2,5×3,3 м</p>
+              </div>
+            </section>
+
+            <section class="calc-total" id="calcTotal">
+              <div class="total-row" id="totalRow">
+                <span>Итого</span>
+                <span id="totalValue">0 ₸</span>
+              </div>
+              <p class="warehouse-note" id="warehouseNote">Стоимость доставки после замера</p>
+              <div class="calc-error" id="calcError"></div>
+              <button type="button" class="btn-primary" id="btnSubmit" disabled>Оформить заявку</button>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <footer class="bottom-nav">
+        <div class="nav-item active">
+          <img src="./assets/nav-home.svg" alt="" />
+          <span>Главная</span>
+        </div>
+        <div class="nav-item" id="navOrders">
+          <img src="./assets/nav-box.svg" alt="" />
+          <span>Заказы</span>
+        </div>
+        <div class="nav-item center">
+          <div class="scan"><img src="./assets/nav-scan.svg" alt="" /></div>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon chat"><img src="./assets/nav-chat.svg" alt="" /></span>
+          <span>Сообщения</span>
+        </div>
+        <div class="nav-item" id="navProfile">
+          <span class="nav-icon profile"><img src="./assets/nav-profile.svg" alt="" /></span>
+          <span>Профиль</span>
+        </div>
+      </footer>
+
+      <div class="home-indicator"></div>
+    </main>
+
+    <div class="account-overlay" id="accountOverlay"></div>
+    <div class="account-sheet" id="accountSheet">
+      <div class="bs-handle"></div>
+      <div class="account-content">
+        <div class="account-group">
+          <p class="account-title">Вы оформляете как</p>
+          <div class="account-list">
+            <button type="button" class="account-row" data-account="personal" data-name="JP4366596" data-type="Личный аккаунт">
+              <div class="account-left">
+                <div class="account-avatar gray"><span class="avatar-icon user"><img src="./assets/icon-user-fill.svg" alt="" /></span></div>
+                <div class="account-info">
+                  <span class="account-name">JP4366596</span>
+                  <span class="account-type">Личный аккаунт</span>
+                </div>
+              </div>
+              <img class="account-check" src="./assets/icon-check-circle.svg" alt="" />
+            </button>
+            <button type="button" class="account-row" data-account="org" data-name='ТОО "Jana Post"' data-type="Организация">
+              <div class="account-left">
+                <div class="account-avatar gray"><span class="avatar-icon brief"><img src="./assets/icon-briefcase.svg" alt="" /></span></div>
+                <div class="account-info">
+                  <span class="account-name">ТОО "Jana Post"</span>
+                  <span class="account-type">Организация</span>
+                </div>
+              </div>
+              <img class="account-check" src="./assets/icon-check-circle.svg" alt="" />
+            </button>
+            <button type="button" class="account-row" data-account="org" data-name='ТОО "Golden Bridge"' data-type="Организация">
+              <div class="account-left">
+                <div class="account-avatar gray"><span class="avatar-icon brief"><img src="./assets/icon-briefcase.svg" alt="" /></span></div>
+                <div class="account-info">
+                  <span class="account-name">ТОО "Golden Bridge"</span>
+                  <span class="account-type">Организация</span>
+                </div>
+              </div>
+              <img class="account-check" src="./assets/icon-check-circle.svg" alt="" />
+            </button>
+          </div>
+        </div>
+        <button type="button" class="add-business-btn">
+          <span>Добавить бизнес-аккаунт</span>
+          <span class="biz-btn-icon"><img src="./assets/icon-arrow-right.svg" alt="" /></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="bs-overlay" id="bsOverlay"></div>
+    <div class="bs-sheet" id="bsSheet">
+      <div class="bs-handle"></div>
+      <div class="bs-header">
+        <div class="bs-input-wrap">
+          <input type="text" class="bs-input" id="bsInput" placeholder=" " />
+          <label class="bs-input-label" for="bsInput">Куда</label>
+        </div>
+      </div>
+      <div class="bs-list" id="bsList">
+        <button type="button" class="bs-city" data-city="Алматы">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Алматы</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Астана">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Астана</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Атырау">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Атырау</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Ақсай">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Ақсай</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Ақтау">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Ақтау</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Ақтөбе">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Ақтөбе</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Бейнеу">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Бейнеу</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Жезқазған">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Жезқазған</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Көкшетау">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Көкшетау</span>
+        </button>
+        <button type="button" class="bs-city" data-city="Павлодар">
+          <span class="bs-city-icon"><img src="./assets/building-city.svg" alt="" /></span>
+          <span>Павлодар</span>
+        </button>
+      </div>
+    </div>
+
+    <main class="screen order-screen" id="orderScreen" hidden>
+      <header class="status-bar">
+        <span class="time">9:41</span>
+        <div class="status-icons">
+          <img src="./assets/mobile-signal.svg" alt="" />
+          <img src="./assets/wifi.svg" alt="" />
+          <img src="./assets/battery.svg" alt="" />
+        </div>
+      </header>
+      <div class="order-header">
+        <button type="button" class="back-btn" id="orderBack">
+          <span class="back-icon"><img src="./assets/icon-arrow-left.svg" alt="" /></span>
+        </button>
+        <span class="order-header-title">Новый заказ</span>
+      </div>
+      <div class="order-content">
+        <section class="order-card">
+          <h3 class="order-card-title">Отправляете как</h3>
+          <div class="order-account-row">
+            <div class="account-avatar green"><span class="avatar-icon brief"><img src="./assets/icon-briefcase.svg" alt="" /></span></div>
+            <div class="account-info">
+              <span class="account-name" id="orderAccountName">ТОО "Jana Post"</span>
+              <span class="account-type" id="orderAccountType">Организация</span>
+            </div>
+          </div>
+        </section>
+        <section class="order-card">
+          <h3 class="order-card-title">Способ отправки</h3>
+          <div class="radio-list">
+            <label class="radio-row">
+              <input type="radio" name="shipping-method" value="dropoff" checked class="visually-hidden" />
+              <span class="radio-ui" aria-hidden="true"></span>
+              <span class="radio-label" id="shippingLabel1">Пункт сдачи</span>
+            </label>
+            <label class="radio-row">
+              <input type="radio" name="shipping-method" value="door" class="visually-hidden" />
+              <span class="radio-ui" aria-hidden="true"></span>
+              <span class="radio-label">От двери</span>
+            </label>
+          </div>
+        </section>
+        <section class="order-card" id="orderFromCard">
+          <h3 class="order-card-title">Откуда</h3>
+          <div class="order-from-group" id="fromStandard">
+            <div class="order-city-row">
+              <span class="order-city-pin"><img src="./assets/icon-map-pin-green.svg" alt="" /></span>
+              <span class="order-city-name">Алматы</span>
+            </div>
+            <div class="field-box placeholder clickable" id="pickupFieldBox">
+              <span class="field-placeholder" id="pickupFieldValue">Пункт сдачи</span>
+            </div>
+          </div>
+          <div class="order-from-warehouse" id="fromWarehouse" hidden>
+            <div class="order-city-row">
+              <span class="order-city-pin"><img src="./assets/icon-map-pin-green.svg" alt="" /></span>
+              <div class="warehouse-address">
+                <span class="warehouse-label">Адрес склада</span>
+                <span class="warehouse-value">г. Алматы, Аргымак 1/1</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="order-card">
+          <h3 class="order-card-title">Куда</h3>
+          <div class="order-fields">
+            <div class="field-box clickable" id="orderCityBox">
+              <span class="field-label">Куда</span>
+              <span class="field-value" id="orderCity">Атырау</span>
+            </div>
+            <div class="field-box placeholder clickable" id="deliveryFieldBox">
+              <span class="field-placeholder" id="deliveryFieldPlaceholder">Пункт выдачи</span>
+            </div>
+          </div>
+        </section>
+        <section class="order-card">
+          <h3 class="order-card-title">О посылке</h3>
+          <div class="order-parcel-row">
+            <span class="parcel-icon"><img src="./assets/icon-box.svg" alt="" /></span>
+            <div class="parcel-info">
+              <span class="parcel-info-title">Посылка</span>
+              <span class="parcel-info-detail" id="orderParcelInfo">24 кг, 2 места</span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer class="order-footer">
+        <div class="order-total-toggle" id="totalToggle">
+          <div class="order-total-row">
+            <span class="order-total-left">
+              <span class="order-total-label">Итого</span>
+              <span class="order-total-arrow" id="totalArrow">&#x25BE;</span>
+            </span>
+            <span class="order-total-value" id="orderTotal">от 2 890 ₸</span>
+          </div>
+          <div class="order-total-details" id="totalDetails" hidden>
+            <div class="order-detail-row" id="volumeRow">
+              <span class="order-detail-label">Объем</span>
+              <span class="order-detail-value" id="orderVolume">—</span>
+            </div>
+            <div class="order-detail-row">
+              <span class="order-detail-label">Вес</span>
+              <span class="order-detail-value" id="orderWeight">0 кг</span>
+            </div>
+            <div class="order-detail-row">
+              <span class="order-detail-label">Кол-во мест</span>
+              <span class="order-detail-value" id="orderPlaces">0</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="btnContinue">Продолжить</button>
+      </footer>
+
+      <div class="pickup-overlay" id="pickupOverlay"></div>
+      <div class="pickup-sheet" id="pickupSheet">
+        <div class="pickup-top">
+          <div class="bs-handle"></div>
+          <div class="pickup-header">
+            <div class="pickup-from">
+              <span class="pickup-pin"><img src="./assets/icon-map-pin-green.svg" alt="" /></span>
+              <div class="pickup-from-text">
+                <span class="pickup-from-label">Откуда</span>
+                <span class="pickup-from-value">Алматы</span>
+              </div>
+            </div>
+            <div class="pickup-actions">
+              <div class="pickup-locate">
+                <span class="pickup-compass"><img src="./assets/icon-compass.svg" alt="" /></span>
+                <span class="pickup-locate-text">Определить местоположение</span>
+              </div>
+              <div class="pickup-input-wrap">
+                <div class="pickup-input-box">
+                  <input type="text" class="pickup-input" id="pickupInput" placeholder=" " />
+                  <label class="pickup-input-label" for="pickupInput">Откуда отправить</label>
+                </div>
+                <p class="pickup-helper">Введите адрес или выберите пункт сдачи</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pickup-list-wrap">
+          <div class="pickup-list">
+            <button type="button" class="pickup-item" data-name="JP0291 - Шұғыла ықшам ауданы" data-addr="Шұғыла City 340/4 кв11" data-dist="40 м">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0291 - Шұғыла ықшам ауданы</span>
+                <span class="pickup-item-sub">Шұғыла City 340/4 кв11</span>
+              </div>
+              <span class="pickup-badge" hidden>40 м</span>
+            </button>
+            <button type="button" class="pickup-item" data-name="JP0231 - Саялы" data-addr="Саялы ы.а., Ақсай к-сі 1" data-dist="461 м">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0231 - Саялы</span>
+                <span class="pickup-item-sub">Саялы ы.а., Ақсай к-сі 1</span>
+              </div>
+              <span class="pickup-badge" hidden>461 м</span>
+            </button>
+            <button type="button" class="pickup-item" data-name="JP0292 - Алма сити" data-addr="Алма сити 4/11 тұрғын үй кешені" data-dist="854.42 м">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0292 - Алма сити</span>
+                <span class="pickup-item-sub">Алма сити 4/11 тұрғын үй кешені</span>
+              </div>
+              <span class="pickup-badge" hidden>854.42 м</span>
+            </button>
+            <button type="button" class="pickup-item" data-name="JP021 - Офис" data-addr="Қарақұлов көшесі, 40" data-dist="3.6 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP021 - Офис</span>
+                <span class="pickup-item-sub">Қарақұлов көшесі, 40</span>
+              </div>
+              <span class="pickup-badge" hidden>3.6 км</span>
+            </button>
+            <button type="button" class="pickup-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="4 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="pickup-badge" hidden>4 км</span>
+            </button>
+            <button type="button" class="pickup-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="5.1 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="pickup-badge" hidden>5.1 км</span>
+            </button>
+            <button type="button" class="pickup-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="5.4 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="pickup-badge" hidden>5.4 км</span>
+            </button>
+            <button type="button" class="pickup-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="9 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="pickup-badge" hidden>9 км</span>
+            </button>
+            <button type="button" class="pickup-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="9.6 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="pickup-badge" hidden>9.6 км</span>
+            </button>
+            <button type="button" class="pickup-item no-border" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="9.6 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="pickup-badge" hidden>9.6 км</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pickup-overlay" id="deliveryOverlay"></div>
+      <div class="pickup-sheet" id="deliverySheet">
+        <div class="pickup-top">
+          <div class="bs-handle"></div>
+          <div class="pickup-header">
+            <div class="pickup-from">
+              <span class="pickup-pin"><img src="./assets/icon-map-pin-green.svg" alt="" /></span>
+              <div class="pickup-from-text">
+                <span class="pickup-from-label">Куда</span>
+                <span class="pickup-from-value" id="deliveryCity">Атырау</span>
+              </div>
+            </div>
+            <div class="pickup-actions">
+              <div class="pickup-locate">
+                <span class="pickup-compass"><img src="./assets/icon-compass.svg" alt="" /></span>
+                <span class="pickup-locate-text">Определить местоположение</span>
+              </div>
+              <div class="pickup-input-wrap">
+                <div class="pickup-input-box">
+                  <input type="text" class="pickup-input" id="deliveryInput" placeholder=" " />
+                  <label class="pickup-input-label" for="deliveryInput">Куда отправить</label>
+                </div>
+                <p class="pickup-helper">Введите адрес или выберите пункт выдачи</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pickup-list-wrap">
+          <div class="pickup-list">
+            <button type="button" class="delivery-item" data-name="JP0291 - Шұғыла ықшам ауданы" data-addr="Шұғыла City 340/4 кв11" data-dist="40 м">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0291 - Шұғыла ықшам ауданы</span>
+                <span class="pickup-item-sub">Шұғыла City 340/4 кв11</span>
+              </div>
+              <span class="delivery-badge" hidden>40 м</span>
+            </button>
+            <button type="button" class="delivery-item" data-name="JP0231 - Саялы" data-addr="Саялы ы.а., Ақсай к-сі 1" data-dist="461 м">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0231 - Саялы</span>
+                <span class="pickup-item-sub">Саялы ы.а., Ақсай к-сі 1</span>
+              </div>
+              <span class="delivery-badge" hidden>461 м</span>
+            </button>
+            <button type="button" class="delivery-item" data-name="JP0292 - Алма сити" data-addr="Алма сити 4/11 тұрғын үй кешені" data-dist="854.42 м">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0292 - Алма сити</span>
+                <span class="pickup-item-sub">Алма сити 4/11 тұрғын үй кешені</span>
+              </div>
+              <span class="delivery-badge" hidden>854.42 м</span>
+            </button>
+            <button type="button" class="delivery-item" data-name="JP021 - Офис" data-addr="Қарақұлов көшесі, 40" data-dist="3.6 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP021 - Офис</span>
+                <span class="pickup-item-sub">Қарақұлов көшесі, 40</span>
+              </div>
+              <span class="delivery-badge" hidden>3.6 км</span>
+            </button>
+            <button type="button" class="delivery-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="4 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="delivery-badge" hidden>4 км</span>
+            </button>
+            <button type="button" class="delivery-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="5.1 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="delivery-badge" hidden>5.1 км</span>
+            </button>
+            <button type="button" class="delivery-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="5.4 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="delivery-badge" hidden>5.4 км</span>
+            </button>
+            <button type="button" class="delivery-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="9 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="delivery-badge" hidden>9 км</span>
+            </button>
+            <button type="button" class="delivery-item" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="9.6 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="delivery-badge" hidden>9.6 км</span>
+            </button>
+            <button type="button" class="delivery-item no-border" data-name="JP0293 - Калкаман-2" data-addr="Грозы көшесі, 65" data-dist="9.6 км">
+              <div class="pickup-item-info">
+                <span class="pickup-item-name">JP0293 - Калкаман-2</span>
+                <span class="pickup-item-sub">Грозы көшесі, 65</span>
+              </div>
+              <span class="delivery-badge" hidden>9.6 км</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <main class="screen order-screen" id="checkoutScreen" hidden>
+      <header class="status-bar">
+        <span class="time">9:41</span>
+        <div class="status-icons">
+          <img src="./assets/mobile-signal.svg" alt="" />
+          <img src="./assets/wifi.svg" alt="" />
+          <img src="./assets/battery.svg" alt="" />
+        </div>
+      </header>
+      <div class="order-header">
+        <button type="button" class="back-btn" id="checkoutBack">
+          <span class="back-icon"><img src="./assets/icon-arrow-left.svg" alt="" /></span>
+        </button>
+        <span class="order-header-title">Новый заказ</span>
+      </div>
+      <div class="order-content">
+        <section class="order-card">
+          <h3 class="order-card-title">Отправить</h3>
+          <div id="chkFromStandard">
+            <div class="order-city-row" style="margin-bottom:8px">
+              <span class="order-city-pin"><img src="./assets/icon-map-pin-green.svg" alt="" /></span>
+              <span class="order-city-name" id="chkFromCity">Алматы</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">Пункт сдачи</span>
+              <span class="field-value" id="chkPickup">Саялы</span>
+            </div>
+          </div>
+          <div id="chkFromWarehouse" hidden>
+            <div class="order-city-row">
+              <span class="order-city-pin"><img src="./assets/icon-map-pin-green.svg" alt="" /></span>
+              <div class="warehouse-address">
+                <span class="warehouse-label">Адрес склада</span>
+                <span class="warehouse-value">г. Алматы, Аргымак 1/1</span>
+              </div>
+            </div>
+          </div>
+          <h4 class="checkout-subtitle">От кого</h4>
+          <div class="checkout-fields">
+            <div class="field-box filled">
+              <span class="field-label">Телефон</span>
+              <span class="field-value">+7 (777) 028-88-69</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">ФИО</span>
+              <span class="field-value">Шакен Шаку</span>
+            </div>
+          </div>
+        </section>
+        <section class="order-card">
+          <h3 class="order-card-title">Доставить</h3>
+          <div class="checkout-fields" id="chkDeliverStandard">
+            <div class="field-box filled">
+              <span class="field-label">Куда</span>
+              <span class="field-value" id="chkToCity">Атырау</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">Пункт выдачи</span>
+              <span class="field-value" id="chkDeliveryPoint">Alma City</span>
+            </div>
+          </div>
+          <div class="checkout-fields" id="chkDeliverOversized" hidden>
+            <div class="field-box filled">
+              <span class="field-label">Адрес доставки</span>
+              <span class="field-value" id="chkDeliveryAddr">Атырау, мкр. Самал 8, 24</span>
+            </div>
+            <span class="checkout-note">Доставка до двери</span>
+          </div>
+          <h4 class="checkout-subtitle">Кому</h4>
+          <div class="checkout-fields">
+            <div class="field-box filled">
+              <span class="field-label">Телефон</span>
+              <span class="field-value">+7 (777) 183-32-32</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">ФИО</span>
+              <span class="field-value">Айдын Серкебай</span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer class="order-footer">
+        <div class="order-total-toggle" id="chkTotalToggle">
+          <div class="order-total-row">
+            <span class="order-total-left">
+              <span class="order-total-label">Итого</span>
+              <span class="order-total-arrow" id="chkTotalArrow">&#x25BE;</span>
+            </span>
+            <span class="order-total-value" id="chkTotal">от 2 890 ₸</span>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="chkSubmit">Продолжить</button>
+      </footer>
+    </main>
+
+    <!-- Profile Screen -->
+    <main class="screen profile-screen" id="profileScreen" hidden>
+      <header class="status-bar">
+        <span class="time">9:41</span>
+        <div class="status-icons">
+          <img src="./assets/mobile-signal.svg" alt="" />
+          <img src="./assets/wifi.svg" alt="" />
+          <img src="./assets/battery.svg" alt="" />
+        </div>
+      </header>
+      <div class="profile-navbar">
+        <button type="button" class="profile-user-btn" id="profileAccountBtn">
+          <div class="profile-user-info">
+            <span class="profile-user-id">JD323232</span>
+            <span class="profile-user-type">Личный аккаунт</span>
+          </div>
+          <img src="./assets/icon-arrow-down.svg" alt="" class="profile-dropdown-icon" />
+        </button>
+        <div class="profile-navbar-right">
+          <button type="button" class="profile-icon-btn">
+            <img src="./assets/icon-ru-flag.svg" alt="RU" class="profile-flag" />
+          </button>
+          <button type="button" class="profile-icon-btn">
+            <img src="./assets/icon-settings.svg" alt="" class="profile-settings-icon" />
+          </button>
+        </div>
+      </div>
+      <div class="profile-content">
+        <div class="profile-menu-card single">
+          <button type="button" class="profile-menu-row" id="btnMyOrgs">
+            <img src="./assets/icon-buildings.svg" alt="" class="profile-menu-icon" />
+            <span class="profile-menu-label">Мои организации</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="profile-menu-arrow" />
+          </button>
+        </div>
+        <div class="profile-menu-card">
+          <button type="button" class="profile-menu-row bordered">
+            <img src="./assets/icon-dollar.svg" alt="" class="profile-menu-icon" />
+            <span class="profile-menu-label">Тарифы</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="profile-menu-arrow" />
+          </button>
+          <button type="button" class="profile-menu-row bordered">
+            <img src="./assets/icon-notebook.svg" alt="" class="profile-menu-icon" />
+            <span class="profile-menu-label">Уроки</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="profile-menu-arrow" />
+          </button>
+          <button type="button" class="profile-menu-row bordered">
+            <img src="./assets/icon-book.svg" alt="" class="profile-menu-icon" />
+            <span class="profile-menu-label">FAQ или ГИД</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="profile-menu-arrow" />
+          </button>
+          <button type="button" class="profile-menu-row bordered">
+            <img src="./assets/icon-delivery.svg" alt="" class="profile-menu-icon" />
+            <span class="profile-menu-label">Доставка внутри страны</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="profile-menu-arrow" />
+          </button>
+          <button type="button" class="profile-menu-row">
+            <img src="./assets/icon-support.svg" alt="" class="profile-menu-icon" />
+            <span class="profile-menu-label">24/7 поддержка</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="profile-menu-arrow" />
+          </button>
+        </div>
+        <div class="profile-social-card">
+          <span class="profile-social-title">Jaña Post в социальных сетях</span>
+          <div class="profile-social-icons">
+            <img src="./assets/icon-social-fb.svg" alt="Facebook" class="social-icon" />
+            <img src="./assets/icon-social-ig.svg" alt="Instagram" class="social-icon" />
+            <img src="./assets/icon-social-tiktok.svg" alt="TikTok" class="social-icon" />
+            <img src="./assets/icon-social-yt.svg" alt="YouTube" class="social-icon" />
+            <img src="./assets/icon-social-tg.svg" alt="Telegram" class="social-icon" />
+          </div>
+        </div>
+      </div>
+      <nav class="bottom-nav">
+        <button type="button" class="nav-item" id="profileNavHome">
+          <img src="./assets/nav-home.svg" alt="" /><span>Главная</span>
+        </button>
+        <button type="button" class="nav-item" id="profileNavOrders">
+          <img src="./assets/nav-box.svg" alt="" /><span>Заказы</span>
+        </button>
+        <button type="button" class="nav-item scan">
+          <span class="scan-btn"><img src="./assets/nav-scan.svg" alt="" /></span>
+        </button>
+        <button type="button" class="nav-item">
+          <img src="./assets/nav-chat.svg" alt="" /><span>Сообщения</span>
+        </button>
+        <button type="button" class="nav-item active">
+          <img src="./assets/nav-profile.svg" alt="" /><span>Профиль</span>
+        </button>
+      </nav>
+
+      <!-- Account switcher bottom sheet -->
+      <div class="account-overlay" id="profileAccountOverlay"></div>
+      <div class="account-sheet" id="profileAccountSheet">
+        <div class="bs-handle"></div>
+        <div class="account-content">
+          <div class="account-group">
+            <p class="account-title">Аккаунт</p>
+            <div class="account-list">
+              <button type="button" class="account-row selected" data-account="personal" data-name="JP4366596" data-type="Личный аккаунт">
+                <div class="account-left">
+                  <div class="account-avatar green"><span class="avatar-icon"><img src="./assets/icon-user-fill.svg" alt="" /></span></div>
+                  <div class="account-info">
+                    <span class="account-name">JP4366596</span>
+                    <span class="account-type">Личный аккаунт</span>
+                  </div>
+                </div>
+                <span class="account-check"><img src="./assets/icon-check-circle.svg" alt="" /></span>
+              </button>
+            </div>
+          </div>
+          <div class="account-group">
+            <p class="account-title">Ваши организации</p>
+            <div class="account-list">
+              <button type="button" class="account-row" data-account="org" data-name='ТОО "Jana Post"' data-type="Организация">
+                <div class="account-left">
+                  <div class="account-avatar green"><span class="avatar-icon brief"><img src="./assets/icon-briefcase.svg" alt="" /></span></div>
+                  <div class="account-info">
+                    <span class="account-name">ТОО "Jana Post"</span>
+                    <span class="account-type">Организация</span>
+                  </div>
+                </div>
+                <span class="account-check"><img src="./assets/icon-check-circle.svg" alt="" /></span>
+              </button>
+              <button type="button" class="account-row" data-account="org" data-name='ТОО "Golden Bridge"' data-type="Организация">
+                <div class="account-left">
+                  <div class="account-avatar green"><span class="avatar-icon brief"><img src="./assets/icon-briefcase.svg" alt="" /></span></div>
+                  <div class="account-info">
+                    <span class="account-name">ТОО "Golden Bridge"</span>
+                    <span class="account-type">Организация</span>
+                  </div>
+                </div>
+                <span class="account-check"><img src="./assets/icon-check-circle.svg" alt="" /></span>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="add-business-btn">
+            <span>Добавить бизнес-аккаунт</span>
+            <span class="biz-btn-icon"><img src="./assets/icon-arrow-right.svg" alt="" /></span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Мои организации Screen -->
+    <main class="screen order-screen" id="orgsScreen" hidden>
+      <header class="status-bar">
+        <span class="time">9:41</span>
+        <div class="status-icons">
+          <img src="./assets/mobile-signal.svg" alt="" />
+          <img src="./assets/wifi.svg" alt="" />
+          <img src="./assets/battery.svg" alt="" />
+        </div>
+      </header>
+      <div class="order-header">
+        <button type="button" class="back-btn" id="orgsBack">
+          <span class="back-icon"><img src="./assets/icon-arrow-left.svg" alt="" /></span>
+        </button>
+        <span class="order-header-title">Мои организации</span>
+      </div>
+      <div class="orgs-content">
+        <div class="orgs-card">
+          <button type="button" class="orgs-row">
+            <div class="orgs-left">
+              <div class="account-avatar green"><span class="avatar-icon brief"><img src="./assets/icon-briefcase.svg" alt="" /></span></div>
+              <div class="account-info">
+                <span class="account-name">ТОО "Jana Post"</span>
+                <span class="account-type">Бизнес-аккаунт</span>
+              </div>
+            </div>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="orgs-arrow" />
+          </button>
+          <button type="button" class="orgs-row">
+            <div class="orgs-left">
+              <div class="account-avatar green"><span class="avatar-icon brief"><img src="./assets/icon-briefcase.svg" alt="" /></span></div>
+              <div class="account-info">
+                <span class="account-name">ТОО "Golden Bridge"</span>
+                <span class="account-type">Бизнес-аккаунт</span>
+              </div>
+            </div>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="orgs-arrow" />
+          </button>
+        </div>
+      </div>
+      <footer class="order-footer">
+        <button type="button" class="btn-primary" id="btnAddOrg">Добавить организацию</button>
+      </footer>
+    </main>
+
+    <!-- Добавить организацию Screen -->
+    <main class="screen order-screen" id="addOrgScreen" hidden>
+      <header class="status-bar">
+        <span class="time">9:41</span>
+        <div class="status-icons">
+          <img src="./assets/mobile-signal.svg" alt="" />
+          <img src="./assets/wifi.svg" alt="" />
+          <img src="./assets/battery.svg" alt="" />
+        </div>
+      </header>
+      <div class="order-header">
+        <button type="button" class="back-btn" id="addOrgBack">
+          <span class="back-icon"><img src="./assets/icon-arrow-left.svg" alt="" /></span>
+        </button>
+        <span class="order-header-title">Добавить организацию</span>
+      </div>
+      <div class="order-content">
+        <section class="order-card" style="padding:12px">
+          <h3 class="order-card-title">Основное</h3>
+          <div class="checkout-fields" style="margin-top:16px;gap:12px">
+            <div class="field-box filled">
+              <span class="field-label">Название организации</span>
+              <span class="field-value">Jana Post</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">Тип организации</span>
+              <span class="field-value">ТОО</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">БИН</span>
+              <span class="field-value">140340014944</span>
+            </div>
+          </div>
+        </section>
+        <section class="order-card" style="padding:12px">
+          <h3 class="order-card-title">Контактные данные</h3>
+          <div class="checkout-fields" style="margin-top:16px;gap:12px">
+            <div class="field-box filled">
+              <span class="field-label">ФИО руководителя</span>
+              <span class="field-value">Аманбаев Ислам Дауренович</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">Телефон</span>
+              <span class="field-value">+7 (747) 888-64-64</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">Email</span>
+              <span class="field-value">islamamanbayev@gmail.com</span>
+            </div>
+          </div>
+        </section>
+        <section class="order-card" style="padding:12px">
+          <h3 class="order-card-title">Адрес</h3>
+          <div class="checkout-fields" style="margin-top:16px;gap:12px">
+            <div class="field-box filled">
+              <span class="field-label">Юридический адрес</span>
+              <span class="field-value">Саялы ы.а., Ақсай к-сі 1</span>
+            </div>
+            <div class="field-box filled">
+              <span class="field-label">Фактический адрес (необязательно)</span>
+              <span class="field-value">Саялы ы.а., Ақсай к-сі 1</span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer class="order-footer">
+        <button type="button" class="btn-primary" id="btnSaveOrg">Сохранить</button>
+      </footer>
+    </main>
+
+    <!-- Orders Screen -->
+    <main class="screen orders-screen" id="ordersScreen" hidden>
+      <header class="status-bar">
+        <span class="time">9:41</span>
+        <div class="status-icons">
+          <img src="./assets/mobile-signal.svg" alt="" />
+          <img src="./assets/wifi.svg" alt="" />
+          <img src="./assets/battery.svg" alt="" />
+        </div>
+      </header>
+      <div class="orders-header">
+        <span class="orders-header-title">Заказы</span>
+      </div>
+      <div class="orders-content">
+        <div class="orders-tabs">
+          <button type="button" class="orders-tab" data-tab="receive">Получение</button>
+          <button type="button" class="orders-tab active" data-tab="send">Отправка</button>
+        </div>
+        <div class="orders-status-card">
+          <button type="button" class="orders-status-row bordered">
+            <img src="./assets/icon-clock.svg" alt="" class="orders-status-icon" />
+            <span class="orders-status-label">В ожидании</span>
+            <span class="orders-status-badge green">2</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="orders-status-arrow" />
+          </button>
+          <button type="button" class="orders-status-row bordered">
+            <img src="./assets/icon-garage.svg" alt="" class="orders-status-icon" />
+            <span class="orders-status-label">Принято</span>
+            <span class="orders-status-badge green">32</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="orders-status-arrow" />
+          </button>
+          <button type="button" class="orders-status-row bordered">
+            <img src="./assets/icon-box-outline.svg" alt="" class="orders-status-icon" />
+            <span class="orders-status-label">На сортировке</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="orders-status-arrow" />
+          </button>
+          <button type="button" class="orders-status-row bordered">
+            <img src="./assets/icon-truck.svg" alt="" class="orders-status-icon" />
+            <span class="orders-status-label">В доставке</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="orders-status-arrow" />
+          </button>
+          <button type="button" class="orders-status-row bordered">
+            <img src="./assets/icon-building-03.svg" alt="" class="orders-status-icon" />
+            <span class="orders-status-label">В отделении</span>
+            <span class="orders-status-badge green">31</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="orders-status-arrow" />
+          </button>
+          <button type="button" class="orders-status-row">
+            <img src="./assets/icon-box-outline2.svg" alt="" class="orders-status-icon" />
+            <span class="orders-status-label">Доставлено</span>
+            <span class="orders-status-badge grey">100</span>
+            <img src="./assets/icon-chevron-right.svg" alt="" class="orders-status-arrow" />
+          </button>
+        </div>
+        <div class="orders-search-card">
+          <img src="./assets/icon-question.svg" alt="" class="orders-status-icon" />
+          <span class="orders-status-label">Поиск потерянного товара</span>
+          <img src="./assets/icon-chevron-right.svg" alt="" class="orders-status-arrow" />
+        </div>
+      </div>
+      <nav class="bottom-nav">
+        <button type="button" class="nav-item" id="ordersNavHome">
+          <img src="./assets/nav-home.svg" alt="" /><span>Главная</span>
+        </button>
+        <button type="button" class="nav-item active">
+          <img src="./assets/nav-box.svg" alt="" /><span>Заказы</span>
+        </button>
+        <button type="button" class="nav-item scan">
+          <span class="scan-btn"><img src="./assets/nav-scan.svg" alt="" /></span>
+        </button>
+        <button type="button" class="nav-item">
+          <img src="./assets/nav-chat.svg" alt="" /><span>Сообщения</span>
+        </button>
+        <button type="button" class="nav-item" id="ordersNavProfile">
+          <img src="./assets/nav-profile.svg" alt="" /><span>Профиль</span>
+        </button>
+      </nav>
+    </main>
+
+    </div>
+
+    <script>
+      (function () {
+        var root = document.querySelector(".screen");
+        var tabs = document.querySelectorAll(".tab[data-mode]");
+        function setMode(mode) {
+          root.dataset.mode = mode;
+          tabs.forEach(function (t) {
+            t.classList.toggle("active", t.dataset.mode === mode);
+          });
+          document.querySelector(".view-personal").hidden = mode !== "personal";
+          document.querySelector(".view-business").hidden = mode !== "business";
+        }
+        tabs.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            setMode(btn.dataset.mode);
+          });
+        });
+
+        var overlay = document.getElementById("bsOverlay");
+        var sheet = document.getElementById("bsSheet");
+        var bsInput = document.getElementById("bsInput");
+        var mainInput = document.getElementById("input-where");
+        var orderCityBox = document.getElementById("orderCityBox");
+        var orderCityEl = document.getElementById("orderCity");
+        var _openedFromOrder = false;
+
+        function openSheet() {
+          overlay.classList.add("active");
+          sheet.classList.add("active");
+          bsInput.value = "";
+          setTimeout(function () { bsInput.focus(); }, 100);
+          filterCities("");
+        }
+        function closeSheet() {
+          overlay.classList.remove("active");
+          sheet.classList.remove("active");
+        }
+
+        mainInput.addEventListener("focus", function (e) {
+          e.target.blur();
+          _openedFromOrder = false;
+          openSheet();
+        });
+
+        if (orderCityBox) {
+          orderCityBox.addEventListener("click", function () {
+            _openedFromOrder = true;
+            openSheet();
+          });
+        }
+
+        overlay.addEventListener("click", closeSheet);
+
+        function filterCities(query) {
+          var q = query.toLowerCase().trim();
+          document.querySelectorAll(".bs-city").forEach(function (btn) {
+            var name = btn.dataset.city.toLowerCase();
+            btn.style.display = name.indexOf(q) !== -1 ? "" : "none";
+          });
+        }
+
+        bsInput.addEventListener("input", function () {
+          filterCities(bsInput.value);
+        });
+
+        document.querySelectorAll(".bs-city").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            if (_openedFromOrder && orderCityEl) {
+              orderCityEl.textContent = btn.dataset.city;
+            } else {
+              mainInput.value = btn.dataset.city;
+              mainInput.dispatchEvent(new Event("input"));
+            }
+            closeSheet();
+          });
+        });
+
+        var parcelStandard = document.getElementById("parcelStandard");
+        var parcelOversized = document.getElementById("parcelOversized");
+        var radios = document.querySelectorAll('input[name="parcel-type"]');
+        var weightInput = document.getElementById("input-weight");
+        var countInput = document.getElementById("input-count");
+        var checkWarehouse = document.getElementById("check-warehouse");
+        var totalSection = document.getElementById("calcTotal");
+        var totalValue = document.getElementById("totalValue");
+        var calcError = document.getElementById("calcError");
+        var btnSubmit = document.getElementById("btnSubmit");
+        var weightSuffix = weightInput.nextElementSibling;
+        var weightWrap = document.getElementById("weightWrap");
+        var weightError = document.getElementById("weightError");
+
+        var PRICE_PER_KG = 1200;
+        var PRICE_PER_PLACE = 500;
+        var MIN_PRICE = 1000;
+        var currentType = "standard";
+
+        function getType() {
+          var checked = document.querySelector('input[name="parcel-type"]:checked');
+          return checked ? checked.value : "standard";
+        }
+
+        radios.forEach(function (r) {
+          r.addEventListener("change", function () {
+            currentType = getType();
+            parcelStandard.hidden = currentType !== "standard";
+            parcelOversized.hidden = currentType !== "oversized";
+            calculate();
+          });
+        });
+
+        function updateSuffix() {
+          var val = weightInput.value.trim();
+          if (val.length > 0 && !weightInput.disabled) {
+            var canvas = document.createElement("canvas");
+            var ctx = canvas.getContext("2d");
+            ctx.font = "500 14px Inter, sans-serif";
+            var textW = ctx.measureText(val).width;
+            weightSuffix.style.display = "block";
+            weightSuffix.style.left = (16 + textW + 4) + "px";
+          } else {
+            weightSuffix.style.display = "none";
+          }
+        }
+
+        function clearWeightError() {
+          weightWrap.classList.remove("error");
+          weightError.classList.remove("visible");
+        }
+
+        function calcStandard() {
+          var isWarehouse = checkWarehouse.checked;
+          totalSection.classList.toggle("warehouse", isWarehouse);
+          clearWeightError();
+
+          if (isWarehouse) { btnSubmit.disabled = false; return; }
+
+          var w = parseFloat(weightInput.value);
+          var p = parseInt(countInput.value, 10);
+          var hasW = weightInput.value.trim().length > 0 && !isNaN(w) && w > 0;
+          var hasP = countInput.value.trim().length > 0 && !isNaN(p) && p > 0;
+
+          if (hasW && w > 30) {
+            weightWrap.classList.add("error");
+            weightError.classList.add("visible");
+            totalValue.textContent = "0 ₸";
+            btnSubmit.disabled = true;
+            return;
+          }
+          if (!hasW || !hasP) {
+            totalValue.textContent = "0 ₸";
+            btnSubmit.disabled = true;
+            return;
+          }
+          var total = w * PRICE_PER_KG + p * PRICE_PER_PLACE;
+          if (total < MIN_PRICE) total = MIN_PRICE;
+          totalValue.textContent = total.toLocaleString("ru-RU") + " ₸";
+          btnSubmit.disabled = false;
+        }
+
+        function calcOversized() {
+          var blocks = document.querySelectorAll("#parcelsContainer .parcel-block");
+          var allWarehouse = true;
+          var allFilled = true;
+          var grandTotal = 0;
+
+          blocks.forEach(function (block) {
+            var chk = block.querySelector(".os-check-warehouse");
+            if (!chk || !chk.checked) allWarehouse = false;
+
+            var wI = block.querySelector(".os-weight");
+            var cI = block.querySelector(".os-count");
+            if (chk && chk.checked) return;
+
+            var w = parseFloat(wI ? wI.value : "");
+            var p = parseInt(cI ? cI.value : "", 10);
+            var hasW = wI && wI.value.trim().length > 0 && !isNaN(w) && w > 0;
+            var hasP = cI && cI.value.trim().length > 0 && !isNaN(p) && p > 0;
+            if (!hasW || !hasP) { allFilled = false; return; }
+            grandTotal += w * PRICE_PER_KG + p * PRICE_PER_PLACE;
+          });
+
+          totalSection.classList.toggle("warehouse", allWarehouse);
+          if (allWarehouse) { btnSubmit.disabled = false; return; }
+          if (!allFilled) {
+            totalValue.textContent = "0 ₸";
+            btnSubmit.disabled = true;
+            return;
+          }
+          if (grandTotal < MIN_PRICE) grandTotal = MIN_PRICE;
+          totalValue.textContent = grandTotal.toLocaleString("ru-RU") + " ₸";
+          btnSubmit.disabled = false;
+        }
+
+        function calculate() {
+          calcError.classList.remove("visible");
+          if (currentType === "standard") calcStandard();
+          else calcOversized();
+        }
+
+        weightInput.addEventListener("input", function () { updateSuffix(); calculate(); });
+        weightInput.addEventListener("focus", updateSuffix);
+        weightInput.addEventListener("blur", updateSuffix);
+        countInput.addEventListener("input", calculate);
+        updateSuffix();
+        calculate();
+
+        checkWarehouse.addEventListener("change", function () {
+          var dis = checkWarehouse.checked;
+          weightInput.disabled = dis;
+          countInput.disabled = dis;
+          weightInput.closest(".parcel-input-wrap").classList.toggle("disabled", dis);
+          countInput.closest(".parcel-input-wrap").classList.toggle("disabled", dis);
+          if (dis) { weightInput.value = ""; countInput.value = ""; updateSuffix(); }
+          calculate();
+        });
+
+        function updateOsSuffix(inp) {
+          var suffix = inp.nextElementSibling;
+          if (!suffix || !suffix.classList.contains("os-suffix")) return;
+          var val = inp.value.trim();
+          if (val.length > 0) {
+            var canvas = document.createElement("canvas");
+            var ctx = canvas.getContext("2d");
+            ctx.font = "500 14px Inter, sans-serif";
+            var textW = ctx.measureText(val).width;
+            suffix.style.display = "block";
+            suffix.style.left = (16 + textW + 4) + "px";
+          } else {
+            suffix.style.display = "none";
+          }
+        }
+
+        function bindOsBlock(block) {
+          var inputs = block.querySelectorAll(".parcel-input");
+          inputs.forEach(function (inp) {
+            inp.addEventListener("input", function () { updateOsSuffix(inp); calculate(); });
+            inp.addEventListener("focus", function () { updateOsSuffix(inp); });
+            inp.addEventListener("blur", function () { updateOsSuffix(inp); });
+            updateOsSuffix(inp);
+          });
+          var chk = block.querySelector(".os-check-warehouse");
+          if (chk) {
+            chk.addEventListener("change", function () {
+              var dis = chk.checked;
+              var wrappers = block.querySelectorAll(".parcel-input-wrap");
+              var fields = block.querySelectorAll(".parcel-input");
+              fields.forEach(function (f) { f.disabled = dis; if (dis) f.value = ""; updateOsSuffix(f); });
+              wrappers.forEach(function (w) { w.classList.toggle("disabled", dis); });
+              calculate();
+            });
+          }
+          var fragile = block.querySelector(".os-check-fragile");
+          var heightInput = block.querySelector(".os-height");
+          if (fragile && heightInput) {
+            fragile.addEventListener("change", function () {
+              if (fragile.checked) {
+                heightInput.value = "300";
+                heightInput.disabled = true;
+                heightInput.closest(".parcel-input-wrap").classList.add("disabled");
+              } else {
+                heightInput.value = "";
+                heightInput.disabled = false;
+                heightInput.closest(".parcel-input-wrap").classList.remove("disabled");
+              }
+              updateOsSuffix(heightInput);
+              calculate();
+            });
+          }
+        }
+        document.querySelectorAll("#parcelsContainer .parcel-block").forEach(bindOsBlock);
+
+        var parcelCounter = 1;
+
+        function updateDeleteButtons() {
+          var blocks = document.querySelectorAll("#parcelsContainer .parcel-block");
+          var show = blocks.length > 1;
+          blocks.forEach(function (b) {
+            var btn = b.querySelector(".parcel-delete");
+            if (btn) btn.classList.toggle("visible", show);
+          });
+        }
+
+        function renumberParcels() {
+          var blocks = document.querySelectorAll("#parcelsContainer .parcel-block");
+          blocks.forEach(function (b, i) {
+            b.dataset.index = i + 1;
+            b.querySelector(".parcel-block-title").textContent = "Посылка " + (i + 1);
+          });
+        }
+
+        function bindDelete(block) {
+          var btn = block.querySelector(".parcel-delete");
+          if (btn) {
+            btn.addEventListener("click", function () {
+              block.remove();
+              renumberParcels();
+              updateDeleteButtons();
+              calculate();
+            });
+          }
+        }
+
+        document.querySelectorAll("#parcelsContainer .parcel-block").forEach(bindDelete);
+        updateDeleteButtons();
+
+        document.getElementById("addParcel").addEventListener("click", function () {
+          parcelCounter++;
+          var tmpl = document.querySelector("#parcelsContainer .parcel-block");
+          var clone = tmpl.cloneNode(true);
+          clone.querySelectorAll(".parcel-input").forEach(function (f) { f.value = ""; f.disabled = false; });
+          clone.querySelectorAll(".parcel-input-wrap").forEach(function (w) { w.classList.remove("disabled"); });
+          clone.querySelectorAll('input[type="checkbox"]').forEach(function (c) { c.checked = false; });
+          document.getElementById("parcelsContainer").appendChild(clone);
+          renumberParcels();
+          bindOsBlock(clone);
+          bindDelete(clone);
+          updateDeleteButtons();
+          calculate();
+        });
+
+        document.getElementById("parcelsContainer").addEventListener("input", function () {
+          calculate();
+        });
+      })();
+
+      /* ======== Account bottom sheet + Order screen ======== */
+      (function () {
+        var accountOverlay = document.getElementById("accountOverlay");
+        var accountSheet = document.getElementById("accountSheet");
+        var btnSubmit = document.getElementById("btnSubmit");
+        var mainScreen = document.getElementById("mainScreen");
+        var orderScreen = document.getElementById("orderScreen");
+        var orderBack = document.getElementById("orderBack");
+        var orderAccountName = document.getElementById("orderAccountName");
+        var orderAccountType = document.getElementById("orderAccountType");
+        var orderCity = document.getElementById("orderCity");
+        var orderTotal = document.getElementById("orderTotal");
+        var orderParcelInfo = document.getElementById("orderParcelInfo");
+
+        function openAccountSheet() {
+          accountOverlay.classList.add("open");
+          accountSheet.classList.add("open");
+        }
+        function closeAccountSheet() {
+          accountOverlay.classList.remove("open");
+          accountSheet.classList.remove("open");
+        }
+
+        btnSubmit.addEventListener("click", function () {
+          if (btnSubmit.disabled) return;
+          openAccountSheet();
+        });
+
+        accountOverlay.addEventListener("click", closeAccountSheet);
+
+        var accountRows = document.querySelectorAll(".account-row");
+        accountRows.forEach(function (row) {
+          row.addEventListener("click", function () {
+            accountRows.forEach(function (r) { r.classList.remove("selected"); });
+            row.classList.add("selected");
+
+            var name = row.getAttribute("data-name");
+            var type = row.getAttribute("data-type");
+            var isOrg = row.getAttribute("data-account") === "org";
+
+            orderAccountName.textContent = name;
+            orderAccountType.textContent = type;
+
+            var avatarEl = orderScreen.querySelector(".order-account-row .account-avatar");
+            avatarEl.classList.remove("gray");
+            avatarEl.classList.add("green");
+            if (isOrg) {
+              avatarEl.querySelector(".avatar-icon").innerHTML = '<img src="./assets/icon-briefcase.svg" alt="" />';
+            } else {
+              avatarEl.querySelector(".avatar-icon").innerHTML = '<img src="./assets/icon-user-fill.svg" alt="" />';
+            }
+
+            var cityEl = document.querySelector("#mainInput .field-value") || document.getElementById("mainInput");
+            var cityVal = "";
+            if (cityEl) {
+              var spans = cityEl.querySelectorAll(".field-value");
+              if (spans.length > 1) cityVal = spans[1].textContent;
+              else cityVal = cityEl.textContent;
+            }
+            var selectedCity = document.querySelector(".bs-city.selected");
+            if (selectedCity) cityVal = selectedCity.textContent.trim();
+            if (!cityVal) cityVal = "Alma City";
+            orderCity.textContent = cityVal;
+
+            var totalEl = document.getElementById("totalValue");
+            if (totalEl) orderTotal.textContent = "от " + totalEl.textContent;
+
+            var orderWeightEl = document.getElementById("orderWeight");
+            var orderPlacesEl = document.getElementById("orderPlaces");
+            var orderVolumeEl = document.getElementById("orderVolume");
+
+            var osRadio = document.querySelector('input[name="parcel-type"][value="oversized"]');
+            var isOS = osRadio && osRadio.checked;
+            var totalW = 0, totalP = 0, totalVol = 0;
+
+            if (isOS) {
+              document.querySelectorAll("#parcelsContainer .parcel-block").forEach(function (block) {
+                var wInp = block.querySelector(".os-weight");
+                var pInp = block.querySelector(".os-count");
+                totalW += parseFloat(wInp ? wInp.value : 0) || 0;
+                totalP += parseInt(pInp ? pInp.value : 0) || 0;
+                var l = 0, wi = 0, h = 0;
+                block.querySelectorAll(".parcel-input.os-dim").forEach(function (d) {
+                  var v = parseFloat(d.value) || 0;
+                  var ph = d.getAttribute("placeholder");
+                  if (ph === "Длина") l = v;
+                  else if (ph === "Ширина") wi = v;
+                  else if (ph === "Высота") h = v;
+                });
+                totalVol += (l * wi * h) / 1000000;
+              });
+            } else {
+              var stdW = document.getElementById("input-weight");
+              var stdP = document.getElementById("input-places");
+              totalW = parseFloat(stdW ? stdW.value : 0) || 0;
+              totalP = parseInt(stdP ? stdP.value : 0) || 0;
+            }
+
+            orderParcelInfo.textContent = totalW + " кг, " + totalP + " места";
+            if (orderWeightEl) orderWeightEl.textContent = totalW ? totalW + " кг" : "—";
+            if (orderPlacesEl) orderPlacesEl.textContent = totalP || "—";
+            if (orderVolumeEl) orderVolumeEl.textContent = totalVol > 0 ? Math.round(totalVol) + " м³" : "—";
+
+            var fromStd = document.getElementById("fromStandard");
+            var fromWh = document.getElementById("fromWarehouse");
+            var shippingLabel1 = document.getElementById("shippingLabel1");
+            var deliveryPh = document.getElementById("deliveryFieldPlaceholder");
+
+            var volumeRow = document.getElementById("volumeRow");
+            if (isOS) {
+              if (shippingLabel1) shippingLabel1.textContent = "Склад";
+              if (fromStd) fromStd.hidden = true;
+              if (fromWh) fromWh.hidden = false;
+              if (deliveryPh) deliveryPh.textContent = "Адрес доставки";
+              if (volumeRow) volumeRow.hidden = false;
+            } else {
+              if (shippingLabel1) shippingLabel1.textContent = "Пункт сдачи";
+              if (fromStd) fromStd.hidden = false;
+              if (fromWh) fromWh.hidden = true;
+              if (deliveryPh) deliveryPh.textContent = "Пункт выдачи";
+              if (volumeRow) volumeRow.hidden = true;
+            }
+
+            setTimeout(function () {
+              closeAccountSheet();
+              setTimeout(function () {
+                mainScreen.hidden = true;
+                orderScreen.hidden = false;
+              }, 260);
+            }, 300);
+          });
+        });
+
+        orderBack.addEventListener("click", function () {
+          orderScreen.hidden = true;
+          mainScreen.hidden = false;
+        });
+
+        var totalToggle = document.getElementById("totalToggle");
+        var totalDetails = document.getElementById("totalDetails");
+        var totalArrow = document.getElementById("totalArrow");
+        totalToggle.addEventListener("click", function () {
+          var expanded = !totalDetails.hidden;
+          totalDetails.hidden = expanded;
+          totalArrow.classList.toggle("expanded", !expanded);
+          totalArrow.innerHTML = expanded ? "&#x25BE;" : "&#x25B4;";
+        });
+      })();
+
+      /* ======== Pickup points bottom sheet ======== */
+      (function () {
+        var pickupOverlay = document.getElementById("pickupOverlay");
+        var pickupSheet = document.getElementById("pickupSheet");
+        var pickupFieldBox = document.getElementById("pickupFieldBox");
+        var pickupInput = document.getElementById("pickupInput");
+        var pickupBadges = document.querySelectorAll(".pickup-badge");
+        var pickupItems = document.querySelectorAll(".pickup-item");
+
+        function openPickup() {
+          pickupOverlay.classList.add("open");
+          pickupSheet.classList.add("open");
+        }
+        function closePickup() {
+          pickupOverlay.classList.remove("open");
+          pickupSheet.classList.remove("open");
+          syncPickupField();
+        }
+
+        function syncPickupField() {
+          var val = pickupInput.value.trim();
+          if (val) {
+            pickupFieldBox.classList.remove("placeholder");
+            pickupFieldBox.innerHTML =
+              '<span class="field-label">Пункт сдачи</span>' +
+              '<span class="field-value">' + val + '</span>';
+          } else {
+            pickupFieldBox.classList.add("placeholder");
+            pickupFieldBox.innerHTML =
+              '<span class="field-placeholder">Пункт сдачи</span>';
+          }
+        }
+
+        pickupFieldBox.addEventListener("click", openPickup);
+        pickupOverlay.addEventListener("click", closePickup);
+
+        pickupInput.addEventListener("input", function () {
+          var q = pickupInput.value.trim().toLowerCase();
+          pickupItems.forEach(function (item) {
+            var name = item.getAttribute("data-name").toLowerCase();
+            var addr = item.getAttribute("data-addr").toLowerCase();
+            item.style.display = (name.indexOf(q) !== -1 || addr.indexOf(q) !== -1) ? "" : "none";
+          });
+        });
+
+        pickupItems.forEach(function (item) {
+          item.addEventListener("click", function () {
+            pickupInput.value = item.getAttribute("data-name");
+            pickupBadges.forEach(function (b) { b.hidden = false; });
+            closePickup();
+          });
+        });
+      })();
+
+      /* ======== Delivery points bottom sheet ======== */
+      (function () {
+        var deliveryOverlay = document.getElementById("deliveryOverlay");
+        var deliverySheet = document.getElementById("deliverySheet");
+        var deliveryFieldBox = document.getElementById("deliveryFieldBox");
+        var deliveryInput = document.getElementById("deliveryInput");
+        var deliveryBadges = document.querySelectorAll(".delivery-badge");
+        var deliveryItems = document.querySelectorAll(".delivery-item");
+
+        function openDelivery() {
+          deliveryOverlay.classList.add("open");
+          deliverySheet.classList.add("open");
+        }
+        function closeDelivery() {
+          deliveryOverlay.classList.remove("open");
+          deliverySheet.classList.remove("open");
+          syncDeliveryField();
+        }
+
+        function syncDeliveryField() {
+          var val = deliveryInput.value.trim();
+          if (val) {
+            deliveryFieldBox.classList.remove("placeholder");
+            deliveryFieldBox.innerHTML =
+              '<span class="field-label">Пункт выдачи</span>' +
+              '<span class="field-value">' + val + '</span>';
+          } else {
+            deliveryFieldBox.classList.add("placeholder");
+            deliveryFieldBox.innerHTML =
+              '<span class="field-placeholder">Пункт выдачи</span>';
+          }
+        }
+
+        deliveryFieldBox.addEventListener("click", openDelivery);
+        deliveryOverlay.addEventListener("click", closeDelivery);
+
+        deliveryInput.addEventListener("input", function () {
+          var q = deliveryInput.value.trim().toLowerCase();
+          deliveryItems.forEach(function (item) {
+            var name = item.getAttribute("data-name").toLowerCase();
+            var addr = item.getAttribute("data-addr").toLowerCase();
+            item.style.display = (name.indexOf(q) !== -1 || addr.indexOf(q) !== -1) ? "" : "none";
+          });
+        });
+
+        deliveryItems.forEach(function (item) {
+          item.addEventListener("click", function () {
+            deliveryInput.value = item.getAttribute("data-name");
+            deliveryBadges.forEach(function (b) { b.hidden = false; });
+            closeDelivery();
+          });
+        });
+
+        var btnContinue = document.getElementById("btnContinue");
+        var checkoutScreen = document.getElementById("checkoutScreen");
+        var checkoutBack = document.getElementById("checkoutBack");
+
+        var _isOversizedOrder = false;
+
+        btnContinue.addEventListener("click", function () {
+          var osRadio = document.querySelector('input[name="parcel-type"][value="oversized"]');
+          _isOversizedOrder = osRadio && osRadio.checked;
+
+          var chkFromStd = document.getElementById("chkFromStandard");
+          var chkFromWh = document.getElementById("chkFromWarehouse");
+          var chkDelStd = document.getElementById("chkDeliverStandard");
+          var chkDelOS = document.getElementById("chkDeliverOversized");
+
+          if (_isOversizedOrder) {
+            chkFromStd.hidden = true;
+            chkFromWh.hidden = false;
+            chkDelStd.hidden = true;
+            chkDelOS.hidden = false;
+          } else {
+            chkFromStd.hidden = false;
+            chkFromWh.hidden = true;
+            chkDelStd.hidden = false;
+            chkDelOS.hidden = true;
+
+            var fromCity = document.querySelector("#fromStandard .order-city-name");
+            var chkCity = document.getElementById("chkFromCity");
+            if (fromCity && chkCity) chkCity.textContent = fromCity.textContent;
+
+            var pickupVal = document.getElementById("pickupFieldValue");
+            var chkPickup = document.getElementById("chkPickup");
+            if (pickupVal && chkPickup) {
+              var pv = pickupVal.textContent.trim();
+              chkPickup.textContent = pv === "Пункт сдачи" ? "—" : pv;
+            }
+
+            var cityVal = document.getElementById("orderCity");
+            var chkToCity = document.getElementById("chkToCity");
+            if (cityVal && chkToCity) chkToCity.textContent = cityVal.textContent;
+
+            var delPh = document.getElementById("deliveryFieldPlaceholder");
+            var chkDelPt = document.getElementById("chkDeliveryPoint");
+            if (chkDelPt) {
+              var dBox = document.getElementById("deliveryFieldBox");
+              var dVal = dBox ? dBox.querySelector(".field-value") : null;
+              chkDelPt.textContent = dVal ? dVal.textContent : "—";
+            }
+          }
+
+          var chkTot = document.getElementById("chkTotal");
+          var ordTot = document.getElementById("orderTotal");
+          if (chkTot && ordTot) chkTot.textContent = ordTot.textContent;
+
+          orderScreen.hidden = true;
+          checkoutScreen.hidden = false;
+        });
+
+        checkoutBack.addEventListener("click", function () {
+          checkoutScreen.hidden = true;
+          orderScreen.hidden = false;
+        });
+
+        var chkTotalToggle = document.getElementById("chkTotalToggle");
+        var chkTotalArrow = document.getElementById("chkTotalArrow");
+        if (chkTotalToggle) {
+          chkTotalToggle.addEventListener("click", function () {
+            var details = chkTotalToggle.querySelector(".order-total-details");
+            if (details) {
+              details.hidden = !details.hidden;
+              chkTotalArrow.textContent = details.hidden ? "\u25BE" : "\u25B4";
+            }
+          });
+        }
+
+        // ── Screen navigation helpers ──
+        var profileScreen = document.getElementById("profileScreen");
+        var orgsScreen = document.getElementById("orgsScreen");
+        var addOrgScreen = document.getElementById("addOrgScreen");
+        var ordersScreen = document.getElementById("ordersScreen");
+        var allScreens = [mainScreen, orderScreen, checkoutScreen, profileScreen, orgsScreen, addOrgScreen, ordersScreen];
+
+        function showScreen(screen) {
+          allScreens.forEach(function (s) { if (s) s.hidden = true; });
+          if (screen) screen.hidden = false;
+        }
+
+        var navProfile = document.getElementById("navProfile");
+        var navOrders = document.getElementById("navOrders");
+        var profileNavHome = document.getElementById("profileNavHome");
+        var profileNavOrders = document.getElementById("profileNavOrders");
+        var ordersNavHome = document.getElementById("ordersNavHome");
+        var ordersNavProfile = document.getElementById("ordersNavProfile");
+
+        if (navProfile) navProfile.addEventListener("click", function () { showScreen(profileScreen); });
+        if (navOrders) navOrders.addEventListener("click", function () { showScreen(ordersScreen); });
+        if (profileNavHome) profileNavHome.addEventListener("click", function () { showScreen(mainScreen); });
+        if (profileNavOrders) profileNavOrders.addEventListener("click", function () { showScreen(ordersScreen); });
+        if (ordersNavHome) ordersNavHome.addEventListener("click", function () { showScreen(mainScreen); });
+        if (ordersNavProfile) ordersNavProfile.addEventListener("click", function () { showScreen(profileScreen); });
+
+        var btnMyOrgs = document.getElementById("btnMyOrgs");
+        var orgsBack = document.getElementById("orgsBack");
+        if (btnMyOrgs) btnMyOrgs.addEventListener("click", function () { showScreen(orgsScreen); });
+        if (orgsBack) orgsBack.addEventListener("click", function () { showScreen(profileScreen); });
+
+        var btnAddOrg = document.getElementById("btnAddOrg");
+        var addOrgBack = document.getElementById("addOrgBack");
+        var btnSaveOrg = document.getElementById("btnSaveOrg");
+        if (btnAddOrg) btnAddOrg.addEventListener("click", function () { showScreen(addOrgScreen); });
+        if (addOrgBack) addOrgBack.addEventListener("click", function () { showScreen(orgsScreen); });
+        if (btnSaveOrg) btnSaveOrg.addEventListener("click", function () { showScreen(orgsScreen); });
+
+        // Profile account switcher bottom sheet
+        var profileAccountBtn = document.getElementById("profileAccountBtn");
+        var profileAccountOverlay = document.getElementById("profileAccountOverlay");
+        var profileAccountSheet = document.getElementById("profileAccountSheet");
+
+        function openProfileAccountSheet() {
+          profileAccountOverlay.classList.add("open");
+          profileAccountSheet.classList.add("open");
+        }
+        function closeProfileAccountSheet() {
+          profileAccountOverlay.classList.remove("open");
+          profileAccountSheet.classList.remove("open");
+        }
+
+        if (profileAccountBtn) {
+          profileAccountBtn.addEventListener("click", openProfileAccountSheet);
+        }
+        if (profileAccountOverlay) {
+          profileAccountOverlay.addEventListener("click", closeProfileAccountSheet);
+        }
+
+        // Orders tab switching
+        var ordersTabs = document.querySelectorAll(".orders-tab");
+        ordersTabs.forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            ordersTabs.forEach(function (t) { t.classList.remove("active"); });
+            tab.classList.add("active");
+          });
+        });
+
+        var profileAccountRows = profileAccountSheet ? profileAccountSheet.querySelectorAll(".account-row") : [];
+        profileAccountRows.forEach(function (row) {
+          row.addEventListener("click", function () {
+            profileAccountRows.forEach(function (r) { r.classList.remove("selected"); });
+            row.classList.add("selected");
+            var name = row.getAttribute("data-name");
+            var type = row.getAttribute("data-type");
+            document.querySelector(".profile-user-id").textContent = name;
+            document.querySelector(".profile-user-type").textContent = type;
+            setTimeout(closeProfileAccountSheet, 200);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>
